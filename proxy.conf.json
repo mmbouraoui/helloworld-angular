@@ -1,0 +1,13 @@
+
+{
+ 
+
+
+  "/test126284": {
+    "target": "http://localhost:9084/",
+     "secure": false,
+     "changeOrigin": true,
+     "logLevel": "debug"
+  }
+ 
+}

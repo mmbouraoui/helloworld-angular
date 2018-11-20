@@ -1,0 +1,8 @@
+
+<p class="life-container" *ngFor="let person of persons | async" >
+    <li>First Name : {{ person.firstName }} </li>
+    <li>Last Name : {{ person.lastName }}</li>
+    <li>Title : {{ person.title }}</li>
+    <li>Age : {{ person.age }}</li>
+    <li>BirthDate : {{ person.birthDate }}</li>
+</p>

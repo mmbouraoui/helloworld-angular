@@ -1,0 +1,25 @@
+<div class="color-dark">
+  <div class="col">
+    <p>Adding items to list</p>
+  </div>
+  <div class="col">
+      <p>Item Count : {{itemcount}}</p>
+    </div>
+</div>
+<div class="color-light" [@goals]="goals.length">
+    <div class="col">
+      <p class="sm">List of items</p>
+      <form>
+          <input type="text" class="txt" name="item" placeholder="Life goal..." [(ngModel)]="goaltext">
+          <button mat-raised-button color="primary" (click)="addItem()">{{ btntxt }}</button>
+      </form>
+    </div>
+    <div class="col">
+          <div class="life-container" *ngFor="let goal of goals; let i = index">
+              <button mat-icon-button (click)="removeItem(i)" color="warn"><mat-icon>delete</mat-icon>            
+              </button>
+            <span>{{ goal }}</span>
+            
+          </div> 
+      </div>
+  </div>
