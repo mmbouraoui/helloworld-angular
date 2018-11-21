@@ -1,11 +1,12 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders,HttpParams, HttpParameterCodec} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import {JwtHelperService} from '@palmyra/angular-jwt-security';
 import 'rxjs/add/operator/map'
 
 @Injectable()
 export class AuthenticationService {
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient,private jwtHttpService: JwtHelperService) { }
 
 
     agacLogin(context: string) {
@@ -33,93 +34,24 @@ export class AuthenticationService {
 
     login(username: string, password: string) {
 
+      
+
       let headers = new HttpHeaders({
-        "Content-Type": "application/json"
-        });
+        "Content-Type": "application/x-www-form-urlencoded"
+      });
+      let body = new HttpParams({ encoder: new CustomEncoder() })
+        .set("username", username)
+        .set("password", password);
         
-        console.log("authenticate");
-        return this.http.post<any>('http://fwpc-86668.hld.net:9084/test126284/services/rest/tokenProvider/getToken', "302d021500876b09edf487a44a2a2798fc90639eb4c87a764502141021b1c4a6caffe1184207989987394b7d640091##OLIS.AUTHENTICATE##1pRfSszyIqzselhCfZwSHg**##31197", {
-          headers
-        })
-          .map(user => { 
-            console.log("AUTH OK ");
-              // login successful if there's a jwt token in the response
-              if (user && user.token) {
-                  // store user details and jwt token in local storage to keep user logged in between page refreshes
-                  localStorage.setItem('currentUser', JSON.stringify(user));
-              }
-  
-              return user;
-          });
+      return this.http.post<any>(`/services/rest/security/authenticate`, body, {
+        headers
+      }).map(res => res.json())
+      ;
+         
 
 
 
-
-
-    //   var ca = document.cookie.split(';'); 
-    //   console.log("cookie");
-    //   console.log(ca);
-    //   let headers = new HttpHeaders({
-    //     "Content-Type": "application/x-www-form-urlencoded"
-    //   });
-    //   let body = new HttpParams({encoder: new CustomEncoder()})
-    //     .set("username", username)
-    //     .set("password", password);
-    // return this.http.post<any>('http://fwpc-86668.hld.net:9082/126322/services/rest/security/authenticate', body.toString(), {
-    //     headers
-    //   })
-    //     .map(user => { 
-    //       console.log("AUTH OK ");
-    //         // login successful if there's a jwt token in the response
-    //         if (user && user.token) {
-    //             // store user details and jwt token in local storage to keep user logged in between page refreshes
-    //             localStorage.setItem('currentUser', JSON.stringify(user));
-    //         }
-
-    //         return user;
-    //     });
-
-
-
-
-
-
-
-        // let headers = new HttpHeaders({
-        //     "Content-Type": "application/x-www-form-urlencoded","Authorization" : "Basic bWJvdXJhb3VpOk1zISEyNjEwMjAxNg=="
-        //   });
-        //   let body = new HttpParams({encoder: new CustomEncoder()})
-        //     .set("username", username)
-        //     .set("password", password);
-
-
-        // return this.http.get('https://fwpc-86668.hld.net:9445/126311/services/rest/loginDetailses?userName=mbouraoui', {
-        //     headers
-        //   })
-          
-        // .map(user => { 
-        //         // login successful if there's a jwt token in the response
-        //       if (user) {
-        //             // store user details and jwt token in local storage to keep user logged in between page refreshes
-        //             localStorage.setItem('currentUser', JSON.stringify(user));
-        //         }
-
-        //         return user;
-        //     });
-
-    //    return this.http.post<any>('/services/rest/security/authenticate', body.toString(), {
-      //      headers
-        //  })
-          
-        //.map(user => { 
-                // login successful if there's a jwt token in the response
-          //      if (user && user.token) {
-                    // store user details and jwt token in local storage to keep user logged in between page refreshes
-            //        localStorage.setItem('currentUser', JSON.stringify(user));
-              //  }
-
-                //return user;
-           // });
+   
     }
 
     logout() {

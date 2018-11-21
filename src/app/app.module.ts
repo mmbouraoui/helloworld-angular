@@ -12,9 +12,15 @@ import { LoginComponent } from './login/login.component';
 import { AuthGuard, SSOGuardService } from './_guards/index';
 import { AlertService, AuthenticationService, DataService, PersonService } from './_services/index';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { JwtInterceptor } from './_helpers/index';
+
 import { AlertComponent } from './_directives/index';
 import { PersonComponent } from './person/person.component';
+import { Router } from '@angular/router';
+import { accessTokenOpt, refreshTokenOpt } from './shared/jwt/jwt-options';
+import { RefreshTokenModule, JwtModule, REFRESH_TOKEN_OPTIONS, JWT_OPTIONS } from '@palmyra/angular-jwt-security';
+
+
+
 
 @NgModule({
   declarations: [
@@ -32,19 +38,18 @@ import { PersonComponent } from './person/person.component';
     HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
-    MatIconModule
+    MatIconModule,
+    RefreshTokenModule.forRoot(refreshTokenOpt),
+    JwtModule.forRoot(accessTokenOpt)
   ],
   providers: [DataService,
     AuthGuard,
     AlertService,
     SSOGuardService,
     PersonService,
-    AuthenticationService,
-    {
-        provide: HTTP_INTERCEPTORS,
-        useClass: JwtInterceptor,
-        multi: true
-    }],
+    AuthenticationService,   
+    {provide: JWT_OPTIONS, useValue: accessTokenOpt},  
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
